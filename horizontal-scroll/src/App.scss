@@ -1,3 +1,7 @@
+html, body {
+  margin: 0;
+}
+
 ::-webkit-scrollbar {
   width: 0px;
 }
@@ -7,6 +11,7 @@
   overflow-x: scroll;
   width: 100%;
   padding: 20px 0;
+  margin-top: 60px;
 }
 
 .card {

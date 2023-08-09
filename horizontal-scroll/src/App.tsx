@@ -1,7 +1,18 @@
+import * as React from "react";
+import { render } from "react-dom";
 import { animated, useSpring } from "react-spring";
-import './App.css'
+import { useScroll } from "react-use-gesture";
+import './App.scss'
 
-const movies = [
+const clamp = (value: number, clampAt: number = 30) => {
+  if (value > 0) {
+    return value > clampAt ? clampAt : value;
+  } else {
+    return value < -clampAt ? -clampAt : value;
+  }
+};
+
+const images = [
   "/images/img-1.jpeg",
   "/images/img-2.jpg",
   "/images/img-3.jpg",
@@ -14,17 +25,22 @@ const movies = [
 ];
 
 const App = () => {
-  const style = useSpring({
-    from: {
-      transform: "perspective(500px) rotateY(0deg)"
-    },
-    transform: "perspective(500px) rotateY(25deg)"
+  const [style, set] = useSpring(() => ({
+    transform: "perspective(500px) rotateY(0deg)"
+  }));
+
+  const bind = useScroll(event => {
+    set({
+      transform: `perspective(500px) rotateY(${
+        event.scrolling ? clamp(event.delta[0]) : 0
+      }deg)`
+    });
   });
   
   return (
     <>
-      <div className="container">
-        {movies.map(src => (
+      <div className="container" {...bind()}>
+        {images.map(src => (
           <animated.div
             key={src}
             className="card"
